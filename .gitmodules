@@ -1,0 +1,15 @@
+[submodule ".config/vim/pack/plugins/start/airline"]
+	path = .config/vim/pack/plugins/start/airline
+	url = https://github.com/vim-airline/vim-airline
+[submodule ".config/vim/pack/plugins/start/ale"]
+	path = .config/vim/pack/plugins/start/ale
+	url = https://github.com/dense-analysis/ale
+[submodule ".config/vim/pack/plugins/start/awesome-vim-colorschemes"]
+	path = .config/vim/pack/plugins/start/awesome-vim-colorschemes
+	url = https://github.com/rafi/awesome-vim-colorschemes
+[submodule ".config/vim/pack/plugins/start/commentary"]
+	path = .config/vim/pack/plugins/start/commentary
+	url = https://github.com/tpope/vim-commentary
+[submodule ".config/vim/pack/plugins/start/emmet"]
+	path = .config/vim/pack/plugins/start/emmet
+	url = https://github.com/mattn/emmet-vim
