@@ -9,7 +9,7 @@ require("mason").setup({
 })
 
 require("mason-lspconfig").setup({
-  ensure_installed = { "bashls", "eslint", "ruff", "lua_ls", "tailwindcss" }
+  ensure_installed = { "bashls", "eslint", "html", "ruff", "lua_ls", "tailwindcss" }
 })
 
 local lspconfig = require("lspconfig")
@@ -47,6 +47,8 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
 end
 
+lspconfig.eslint.setup {}
+
 -- Configure `ruff-lsp`.
 -- See: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#ruff_lsp
 -- For the default config, along with instructions on how to customize the settings
@@ -59,3 +61,7 @@ lspconfig.ruff_lsp.setup {
     }
   }
 }
+
+lspconfig.html.setup {}
+
+lspconfig.phpactor.setup {}

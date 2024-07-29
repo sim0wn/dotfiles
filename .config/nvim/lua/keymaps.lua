@@ -17,6 +17,9 @@ vim.keymap.set('n', '<C-Down>', ':resize +2<CR>', options)
 vim.keymap.set('n', '<C-Left>', ':vertical resize -2<CR>', options)
 vim.keymap.set('n', '<C-Right>', ':vertical resize +2<CR>', options)
 
+-- NERDTree
+vim.keymap.set('n', '<leader>fe', ':NERDTreeToggle<CR>')
+
 -------------------
 --- Visual Mode ---
 -------------------
