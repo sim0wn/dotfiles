@@ -14,6 +14,7 @@ vim.opt.cursorline = true
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 vim.opt.termguicolors = true
+vim.opt.scrolloff = 999
 vim.opt.listchars = { trail = "•", nbsp = "␣", precedes = "<", extends = ">" }
 vim.opt.guicursor = "n-v-c:hor30,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175"
 
