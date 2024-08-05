@@ -9,6 +9,8 @@ alias pandoc='podman run --rm -v "${PWD}:/data:z" pandoc/latex'
 # ------------------------------
 alias cewl='podman run -it --rm -v "${PWD}:/host" ghcr.io/digininja/cewl'
 
+alias caido='podman run --rm -p 8080:8080 --userns=keep-id --user root -v "$HOME/.local/share/caido:/home/caido/.local/share/caido" caido/caido:latest'
+
 function feroxbuster () {
   podman run --rm --init --interactive --userns=keep-id \
     --volume="$HOME/.config/feroxbuster:/root/.config/feroxbuster:z" \
