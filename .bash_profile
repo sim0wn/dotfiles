@@ -22,6 +22,7 @@ VISUAL="$EDITOR"
 #################
 export npm_config_userconfig="$HOME/.config/npm/npmrc"
 export npm_config_cache="$HOME/.cache/npm"
+PATH="${PATH:+${PATH}:}$HOME/.local/share/npm/bin/"
 
 #################
 ### -- GIT -- ###
