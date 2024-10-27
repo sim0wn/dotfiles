@@ -1,7 +1,6 @@
 ---
-- name: Fedora post installation
+- name: Fedora post-installation
   hosts: localhost
-  become: false
   vars:
     dconf_profile_path: "/org/gnome/terminal/legacy/profiles:"
   tasks:
@@ -18,6 +17,7 @@
           - binwalk
           - firewalld
           - ftp
+          - gh
           - gimp
           - git
           - gnome-boxes
@@ -53,7 +53,7 @@
       become: true
     - name: Use stow to link dotfiles
       ansible.builtin.command:
-        cmd: "stow --adopt --target='{{ ansible_env.HOME }}' --dir='{{ ansible_env.HOME }}/.local/share/dotfiles' ."
+        cmd: "stow --adopt --target='{{ ansible_env.HOME }}' --dir='{{ ansible_env.HOME }}/.local/share/dotfiles' --stow ."
     - name: Create podman containers directories
       block:
         - name: Make Caido directory
