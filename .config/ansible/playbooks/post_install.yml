@@ -1,0 +1,137 @@
+---
+- name: Fedora post installation
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Update repositories
+      ansible.builtin.dnf:
+        name: "*"
+        update_cache: yes
+        state: latest
+    - name: Install packages
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - aircrack-ng
+        - binwalk
+        - firewalld
+        - ftp
+        - gimp
+        - git
+        - gnome-boxes
+        - golang
+        - hashcat
+        - hydra
+        - inkscape
+        - jetbrains-mono-fonts-all
+        - jq
+        - lua
+        - medusa
+        - neovim
+        - nmap
+        - nodejs
+        - openvpn
+        - podman
+        - podman-compose
+        - radare2
+        - ruff
+        - ruff-lsp
+        - ripgrep
+        - sqlite
+        - tcpdump
+        - tmux
+        - toolbox
+        - vim
+        - whois
+        - wireshark
+        - wl-clipboard
+        - xq
+    - name: Create podman containers directories
+      block:
+        - name: Make Caido directory
+          ansible.builtin.file:
+            path: "{{ ansible_env.HOME }}/.local/share/caido"
+            state: directory
+            mode: "644"
+        - name: Change permissions to match Podman namespace
+          ansible.builtin.command:
+            cmd: "chown -R 999:999 {{ ansible_env.HOME }}/.local/share/caido"
+    - name: Disable mouse acceleration
+      ansible.builtin.dconf:
+        key: /org/gnome/desktop/peripherals/mouse/accel-profile
+        value: "flat"
+        state: present
+    - name: Enable firewall
+      block:
+        - name: Enable and start firewalld
+          ansible.builtin.systemd:
+            name: firewalld
+            enabled: yes
+            state: started
+        - name: Enable firewalld in the home zone
+          ansible.posix.firewalld:
+            state: enabled
+            immediate: yes
+            permanent: yes
+            zone: home
+    - name: Create a GNOME Terminal profile
+      block:
+        - name: Generate a new profile ID using uuidgen
+          command: uuidgen
+          register: uuidgen
+        - name: Create the profile
+          community.general.dconf:
+            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/visible-name"
+            value: "'sim0wn'"
+            state: present
+        - name: Set the profile as default
+          community.general.dconf:
+            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/default"
+            value: "true"
+            state: present
+        - name: Set the profile background color
+          community.general.dconf:
+            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/background-color"
+            value: "'#191724'"
+            state: present
+        - name: Set the profile foreground color
+          community.general.dconf:
+            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/foreground-color"
+            value: "'#E0DEF4'"
+            state: present
+        - name: Set the highlight background color
+          community.general.dconf:
+            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/highlight-background"
+            value: "['#2A273F']"
+            state: present
+        - name: Set the highlight foreground color
+          community.general.dconf:
+            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/highlight-foreground"
+            value: "'#575268'"
+            state: present
+        - name: Set the profile palette
+          community.general.dconf:
+            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/palette"
+            value: "['#191724', '#F38BA8', '#A6D6A8', '#F4B9A8', '#C4A7E7', '#F4B8E4', '#A5D6DB', '#E0DEF4', '#575268', '#F9E2AF', '#F4B9A8', '#A6D6A8', '#F38BA8', '#F4B8E4', '#C4A7E7', '#A5D6DB']"
+            state: present
+        - name: Set the profile font
+          community.general.dconf:
+            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/font"
+            value: "'JetBrains Mono 12'"
+            state: present
+        - name: Set the profile use-system-font
+          community.general.dconf:
+            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/use-system-font"
+            value: "false"
+            state: present
+        - name: Set the cursor shape
+          community.general.dconf:
+            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/cursor-shape"
+            value: "'underline'"
+            state: present
+        - name: Set scrollback unlimited
+          community.general.dconf:
+            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/scrollback-unlimited"
+            value: "true"
+            state: present
