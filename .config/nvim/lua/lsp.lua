@@ -9,7 +9,7 @@ require("mason").setup({
 })
 
 require("mason-lspconfig").setup({
-  ensure_installed = { "bashls", "eslint", "html", "lua_ls", "ruff", "tsserver", "tailwindcss" }
+  ensure_installed = { "bashls", "eslint", "html", "lua_ls", "ruff", "tailwindcss", "ts_ls" }
 })
 
 local lspconfig = require("lspconfig")
@@ -47,22 +47,34 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
 end
 
-lspconfig.eslint.setup {}
+-- Configure linters
+
+lspconfig.bashls.setup {}
+
+lspconfig.eslint.setup {
+  cmd = {
+    "eslint_d",
+    "--stdio"
+  },
+  on_attach = on_attach
+}
 
 lspconfig.html.setup {}
 
--- Configure `ruff-lsp`.
--- See: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#ruff_lsp
--- For the default config, along with instructions on how to customize the settings
-lspconfig.ruff_lsp.setup {
-  on_attach = on_attach,
-  init_options = {
-    settings = {
-      -- Any extra CLI arguments for `ruff` go here.
-      args = {},
+lspconfig.lua_ls.setup {
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = { "vim" }
+      }
     }
   }
 }
 
+lspconfig.ruff_lsp.setup {
+  on_attach = on_attach,
+}
+
 lspconfig.tailwindcss.setup {}
-lspconfig.tsserver.setup {}
+
+lspconfig.ts_ls.setup {}
