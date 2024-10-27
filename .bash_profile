@@ -1,36 +1,36 @@
-# .bash_profile
+# ------------------------------------------------
+# --- Source the aliases and other preferences ---
+# ------------------------------------------------
 
-# Get the aliases and functions
-if [ -f ~/.bashrc ]; then
-    . ~/.bashrc
+if [ -r ~/.bashrc ]; then
+    source ~/.bashrc
 fi
 
-# User specific environment and startup programs
+# -----------------------
+# --- NPM preferences ---
+# -----------------------
 
-#######################
-### - Environment - ###
-#######################
+export npm_config_userconfig="${HOME}/.config/npm/npmrc"
+export npm_config_cache="${HOME}/.cache/npm"
 
-##################
-### -- BASH -- ###
-##################
+# -----------------------
+# --- Git preferences ---
+# -----------------------
+
+export GIT_CONFIG="${HOME}/.config/git/config"
+
+# ----------------------
+# --- Go preferences ---
+# ----------------------
+
+export GOPATH="${HOME}/.local/share/go"
+
+# -----------------------------
+# --- Environment variables ---
+# -----------------------------
+
 EDITOR="nvim"
-VISUAL="$EDITOR"
+VISUAL="${EDITOR}"
 
-#################
-### -- NPM -- ###
-#################
-export npm_config_userconfig="$HOME/.config/npm/npmrc"
-export npm_config_cache="$HOME/.cache/npm"
-PATH="${PATH:+${PATH}:}$HOME/.local/share/npm/bin/"
-
-#################
-### -- GIT -- ###
-#################
-export GIT_CONFIG="$HOME/.config/git/config"
-
-##################
-### -- PATH -- ###
-##################
-export GOPATH="$HOME/.local/share/go"
-PATH="${PATH:+${PATH}:}$GOPATH/bin/"
+PATH="${PATH:+${PATH}:}${GOPATH}/bin/" # add GOPATH to PATH
+PATH="${PATH:+${PATH}:}${HOME}/.local/share/npm/bin/" # add NPM PATH to PATH
