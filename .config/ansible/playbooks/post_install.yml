@@ -1,52 +1,59 @@
 ---
 - name: Fedora post installation
   hosts: localhost
-  become: yes
+  become: false
+  vars:
+    dconf_profile_path: "/org/gnome/terminal/legacy/profiles:"
   tasks:
     - name: Update repositories
       ansible.builtin.dnf:
         name: "*"
         update_cache: yes
         state: latest
+      become: true
     - name: Install packages
       ansible.builtin.dnf:
-        name: "{{ item }}"
+        name:
+          - aircrack-ng
+          - binwalk
+          - firewalld
+          - ftp
+          - gimp
+          - git
+          - gnome-boxes
+          - golang
+          - hashcat
+          - hydra
+          - inkscape
+          - jetbrains-mono-fonts-all
+          - jq
+          - lua
+          - medusa
+          - neovim
+          - nmap
+          - nodejs
+          - openvpn
+          - podman
+          - podman-compose
+          - python3-psutil
+          - radare2
+          - ruff
+          - ruff-lsp
+          - ripgrep
+          - sqlite
+          - tcpdump
+          - tmux
+          - toolbox
+          - vim
+          - whois
+          - wireshark
+          - wl-clipboard
+          - xq
         state: present
-      loop:
-        - aircrack-ng
-        - binwalk
-        - firewalld
-        - ftp
-        - gimp
-        - git
-        - gnome-boxes
-        - golang
-        - hashcat
-        - hydra
-        - inkscape
-        - jetbrains-mono-fonts-all
-        - jq
-        - lua
-        - medusa
-        - neovim
-        - nmap
-        - nodejs
-        - openvpn
-        - podman
-        - podman-compose
-        - radare2
-        - ruff
-        - ruff-lsp
-        - ripgrep
-        - sqlite
-        - tcpdump
-        - tmux
-        - toolbox
-        - vim
-        - whois
-        - wireshark
-        - wl-clipboard
-        - xq
+      become: true
+    - name: Use stow to link dotfiles
+      ansible.builtin.command:
+        cmd: "stow --adopt --target='{{ ansible_env.HOME }}' --dir='{{ ansible_env.HOME }}/.local/share/dotfiles' ."
     - name: Create podman containers directories
       block:
         - name: Make Caido directory
@@ -57,10 +64,11 @@
         - name: Change permissions to match Podman namespace
           ansible.builtin.command:
             cmd: "chown -R 999:999 {{ ansible_env.HOME }}/.local/share/caido"
+          become: true
     - name: Disable mouse acceleration
       ansible.builtin.dconf:
         key: /org/gnome/desktop/peripherals/mouse/accel-profile
-        value: "flat"
+        value: "'flat'"
         state: present
     - name: Enable firewall
       block:
@@ -80,58 +88,68 @@
         - name: Generate a new profile ID using uuidgen
           command: uuidgen
           register: uuidgen
-        - name: Create the profile
+        - name:
           community.general.dconf:
-            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/visible-name"
+            key: "{{ dconf_profile_path }}/list"
+            value: "['{{ uuidgen.stdout }}']"
+            state: present
+        - name: Set the profile name
+          community.general.dconf:
+            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/visible-name"
             value: "'sim0wn'"
             state: present
         - name: Set the profile as default
-          community.general.dconf:
-            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/default"
+          community.general.dconf: 
+            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/default"
             value: "true"
             state: present
         - name: Set the profile background color
           community.general.dconf:
-            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/background-color"
+            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/background-color"
             value: "'#191724'"
             state: present
         - name: Set the profile foreground color
           community.general.dconf:
-            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/foreground-color"
+            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/foreground-color"
             value: "'#E0DEF4'"
             state: present
         - name: Set the highlight background color
           community.general.dconf:
-            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/highlight-background"
+            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/highlight-background"
             value: "['#2A273F']"
             state: present
         - name: Set the highlight foreground color
           community.general.dconf:
-            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/highlight-foreground"
+            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/highlight-foreground"
             value: "'#575268'"
             state: present
         - name: Set the profile palette
           community.general.dconf:
-            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/palette"
+            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/palette"
             value: "['#191724', '#F38BA8', '#A6D6A8', '#F4B9A8', '#C4A7E7', '#F4B8E4', '#A5D6DB', '#E0DEF4', '#575268', '#F9E2AF', '#F4B9A8', '#A6D6A8', '#F38BA8', '#F4B8E4', '#C4A7E7', '#A5D6DB']"
+            state: present
+        - name: Don't use the system colors
+          community.general.dconf:
+            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/use-theme-colors"
+            value: "false"
             state: present
         - name: Set the profile font
           community.general.dconf:
-            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/font"
+            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/font"
             value: "'JetBrains Mono 12'"
             state: present
         - name: Set the profile use-system-font
           community.general.dconf:
-            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/use-system-font"
+            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/use-system-font"
             value: "false"
             state: present
         - name: Set the cursor shape
           community.general.dconf:
-            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/cursor-shape"
+            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/cursor-shape"
             value: "'underline'"
             state: present
         - name: Set scrollback unlimited
           community.general.dconf:
-            key: "/org/gnome/terminal/legacy/profiles:/:{{ uuidgen.stdout }}/scrollback-unlimited"
+            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/scrollback-unlimited"
             value: "true"
             state: present

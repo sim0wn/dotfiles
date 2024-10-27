@@ -1,36 +1,8 @@
-# ------------------------------------------------
-# --- Source the aliases and other preferences ---
-# ------------------------------------------------
+# .bash_profile
 
-if [ -r ~/.bashrc ]; then
-    source ~/.bashrc
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
 fi
 
-# -----------------------
-# --- NPM preferences ---
-# -----------------------
-
-export npm_config_userconfig="${HOME}/.config/npm/npmrc"
-export npm_config_cache="${HOME}/.cache/npm"
-
-# -----------------------
-# --- Git preferences ---
-# -----------------------
-
-export GIT_CONFIG="${HOME}/.config/git/config"
-
-# ----------------------
-# --- Go preferences ---
-# ----------------------
-
-export GOPATH="${HOME}/.local/share/go"
-
-# -----------------------------
-# --- Environment variables ---
-# -----------------------------
-
-EDITOR="nvim"
-VISUAL="${EDITOR}"
-
-PATH="${PATH:+${PATH}:}${GOPATH}/bin/" # add GOPATH to PATH
-PATH="${PATH:+${PATH}:}${HOME}/.local/share/npm/bin/" # add NPM PATH to PATH
+# User specific environment and startup programs
