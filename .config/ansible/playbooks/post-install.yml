@@ -1,5 +1,5 @@
 ---
-- name: Fedora post-installation
+- name: Fedora post-installation playbook
   hosts: localhost
   vars:
     dconf_profile_path: "/org/gnome/terminal/legacy/profiles:"
@@ -83,6 +83,16 @@
             immediate: yes
             permanent: yes
             zone: home
+    - block:
+      - name: Install Go tools
+        set_fact:
+          GOPATH: "{{ ansible_env.HOME }}/.local/share/go"
+      - name: Install fabric framework
+        ansible.builtin.command:
+          cmd: "go install github.com/danielmiessler/fabric@latest"
+      - name: Install ffuf
+        ansible.builtin.command:
+          cmd: "go install github.com/ffuf/ffuf/v2@latest"
     - name: Create a GNOME Terminal profile
       block:
         - name: Generate a new profile ID using uuidgen
