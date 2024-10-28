@@ -50,6 +50,15 @@ function mitmproxy() {
     docker.io/mitmproxy/mitmproxy "$@"
 }
 
+function oolama() {
+  podman run --detach \
+    --gpus=all \
+    --volume=ollama:/root/.ollama \
+    --publish 11434:11434 \
+    --name ollama \
+    ollama/ollama "$@"
+}
+
 function rustscan () {
   podman run --rm --interactive --tty \
     --cap-add=NET_ADMIN,NET_RAW,NET_BIND_SERVICE --privileged \
@@ -64,4 +73,5 @@ export -f cewl
 export -f feroxbuster
 export -f jwt_tool
 export -f mitmproxy
+export -f oolama
 export -f rustscan
