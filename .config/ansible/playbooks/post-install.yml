@@ -85,6 +85,9 @@
             immediate: yes
             permanent: yes
             zone: home
+    - name: Enable GS Connect extension
+      ansible.builtin.command:
+        cmd: "gnome-extensions enable gsconnect@andyholmes.github.io"
     - block:
       - name: Install Go tools
         set_fact:
