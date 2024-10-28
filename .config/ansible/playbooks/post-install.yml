@@ -21,6 +21,7 @@
           - gimp
           - git
           - gnome-boxes
+          - gnome-shell-extension-gsconnect
           - gnucash
           - golang
           - hashcat
