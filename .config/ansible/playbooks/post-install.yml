@@ -98,6 +98,9 @@
       - name: Install ffuf
         ansible.builtin.command:
           cmd: "go install github.com/ffuf/ffuf/v2@latest"
+    - name: Install GitHub Copilot CLI extension
+      ansible.builtin.command:
+        cmd: "gh extension install github/gh-copilot"
     - name: Create a GNOME Terminal profile
       block:
         - name: Generate a new profile ID using uuidgen
