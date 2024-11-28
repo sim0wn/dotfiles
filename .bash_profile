@@ -25,6 +25,12 @@ export GIT_CONFIG="${HOME}/.config/git/config"
 
 export GOPATH="${HOME}/.local/share/go"
 
+# ------------------------
+# --- Rust preferences ---
+# ------------------------
+
+CARGO_HOME="${HOME}/.local/share/cargo"
+
 # -----------------------------
 # --- Environment variables ---
 # -----------------------------
@@ -33,4 +39,5 @@ EDITOR="nvim"
 VISUAL="${EDITOR}"
 
 PATH="${PATH:+${PATH}:}${GOPATH}/bin/" # add GOPATH to PATH
+PATH="${PATH:+${PATH}:}${CARGO_HOME}/bin/" # add NPM PATH to PATH
 PATH="${PATH:+${PATH}:}${HOME}/.local/share/npm/bin/" # add NPM PATH to PATH

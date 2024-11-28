@@ -1,0 +1,39 @@
+---
+- name: Setup security tools
+  hosts: localhost
+  tasks:
+    - name: Update repositories
+      ansible.builtin.dnf:
+        name: "*"
+        update_cache: yes
+        state: latest
+      become: true
+    - name: Install packages
+      ansible.builtin.dnf:
+        name:
+          - aircrack-ng
+          - binwalk
+          - chisel
+          - hashcat
+          - hydra
+          - medusa
+          - nmap
+          - radare2
+          - tcpdump
+          - whois
+          - wireshark
+        become: true
+    - name: Golang security tools
+      block:
+        - name: Define GOPATH
+          set_fact:
+            GOPATH: "{{ ansible_env.HOME }}/.local/share/go"
+        - name: Install ffuf
+          ansible.builtin.command:
+            cmd: "go install github.com/ffuf/ffuf/v2@latest"
+        - name: Install httpx
+          ansible.builtin.command:
+            cmd: "go install github.com/projectdiscovery/httpx/cmd/httpx@latest" 
+        - name: Install interactsh-client
+          ansible.builtin.command:
+            cmd: "go install -v github.com/projectdiscovery/interactsh/cmd/interactsh-client@latest"

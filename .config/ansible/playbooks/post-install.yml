@@ -13,8 +13,6 @@
     - name: Install packages
       ansible.builtin.dnf:
         name:
-          - aircrack-ng
-          - binwalk
           - firewalld
           - ftp
           - gh
@@ -24,31 +22,31 @@
           - gnome-shell-extension-gsconnect
           - gnucash
           - golang
-          - hashcat
-          - hydra
           - inkscape
           - jetbrains-mono-fonts-all
           - jq
           - lua
-          - medusa
           - neovim
-          - nmap
           - nodejs
           - openvpn
           - podman
           - podman-compose
           - python3-psutil
-          - radare2
           - ruff
           - ruff-lsp
           - ripgrep
           - sqlite
-          - tcpdump
+          - texlive-scheme-basic
+          - texlive-babel-portuges
+          - texlive-fontawesome5
+          - texlive-hyphen-portuguese
+          - texlive-parskip
+          - texlive-sourcesanspro
+          - texlive-tcolorbox
+          - texlive-tikzfill
           - tmux
           - toolbox
           - vim
-          - whois
-          - wireshark
           - wl-clipboard
           - xq
         state: present
@@ -56,17 +54,6 @@
     - name: Use stow to link dotfiles
       ansible.builtin.command:
         cmd: "stow --adopt --target='{{ ansible_env.HOME }}' --dir='{{ ansible_env.HOME }}/.local/share/dotfiles' --stow ."
-    - name: Create podman containers directories
-      block:
-        - name: Make Caido directory
-          ansible.builtin.file:
-            path: "{{ ansible_env.HOME }}/.local/share/caido"
-            state: directory
-            mode: "644"
-        - name: Change permissions to match Podman namespace
-          ansible.builtin.command:
-            cmd: "chown -R 999:999 {{ ansible_env.HOME }}/.local/share/caido"
-          become: true
     - name: Disable mouse acceleration
       ansible.builtin.dconf:
         key: /org/gnome/desktop/peripherals/mouse/accel-profile
@@ -89,15 +76,12 @@
       ansible.builtin.command:
         cmd: "gnome-extensions enable gsconnect@andyholmes.github.io"
     - block:
-      - name: Install Go tools
+      - name: Golang tools
         set_fact:
           GOPATH: "{{ ansible_env.HOME }}/.local/share/go"
       - name: Install fabric framework
         ansible.builtin.command:
           cmd: "go install github.com/danielmiessler/fabric@latest"
-      - name: Install ffuf
-        ansible.builtin.command:
-          cmd: "go install github.com/ffuf/ffuf/v2@latest"
     - name: Install GitHub Copilot CLI extension
       ansible.builtin.command:
         cmd: "gh extension install github/gh-copilot"
