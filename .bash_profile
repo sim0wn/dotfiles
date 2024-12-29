@@ -35,7 +35,7 @@ export GOPATH="${HOME}/.local/share/go"
 # --- Rust preferences ---
 # ------------------------
 
-CARGO_HOME="${HOME}/.local/share/cargo"
+export CARGO_HOME="${HOME}/.local/share/cargo"
 
 # -----------------------------
 # --- Environment variables ---

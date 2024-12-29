@@ -20,13 +20,6 @@ function cewl() {
     ghcr.io/digininja/cewl "$@"
 }
 
-function jwt_tool() {
-  podman run --rm --interactive \
-    --volume="${PWD}:/tmp:Z" \
-    --volume="${HOME}/.config/jwt_tool:/root/.jwt_tool:Z" \
-    ticarpi/jwt_tool:latest "$@"
-}
-
 function mitmproxy() {
   podman run --rm --interactive --tty \
     --publish "8080:8080" \
@@ -45,6 +38,5 @@ function rustscan () {
 }
 
 export -f cewl
-export -f jwt_tool
 export -f mitmproxy
 export -f rustscan

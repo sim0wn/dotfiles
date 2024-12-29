@@ -15,6 +15,7 @@
           - binwalk
           - chisel
           - hashcat
+          - hivex
           - hydra
           - medusa
           - nmap
@@ -40,3 +41,12 @@
     - name: Install caido
       ansible.builtin.command:
         cmd: "echo 'TEFURVNUX1JFTEVBU0U9IiQoY3VybCAtTHMgJ2h0dHA6Ly9hcGkuZ2l0aHViLmNvbS9yZXBvcy9jYWlkby9jYWlkby9yZWxlYXNlcy9sYXRlc3QnKSIKQk9EWT0iJChlY2hvICIke0xBVEVTVF9SRUxFQVNFfSIgfCBqcSAtcyAnLltdLmJvZHknKSIKTElOVVhfWDg2XzY0PSIkKGVjaG8gLWUgXCIke0JPRFl9XCIgfCBncmVwIC1vRSAnXi4rXFtMaW51eCB4ODZfNjRcXVwoLipcKScgfCBzZWQgJ3MvLiooXCguKlwpKS9cMS9nJykiCgpjdXJsIC1MICIke0xJTlVYX1g4Nl82NH0iIHwgdGFyIHp4ZiAtIC1DICIke0hPTUV9Ly5sb2NhbC9iaW4vIgoK' | base64 -d | bash"
+    - name: Install tools using Cargo
+      block:
+        - name: Define CARGO_HOME
+          set_fact:
+            GOPATH: "{{ ansible_env.HOME }}/.local/share/cargo"
+        - name: Install evtx (Windows Event Log parser)
+          ansible.builtin.command:
+            cmd: "cargo install evtx"
+
