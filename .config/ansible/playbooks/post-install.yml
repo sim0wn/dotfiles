@@ -33,6 +33,7 @@
           - podman
           - podman-compose
           - python3-psutil
+          - python3-sympy
           - ruff
           - ruff-lsp
           - ripgrep
