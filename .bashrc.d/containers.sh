@@ -30,13 +30,5 @@ function mitmproxy() {
     docker.io/mitmproxy/mitmproxy "$@"
 }
 
-function rustscan () {
-  podman run --rm --interactive --tty \
-    --cap-add=NET_ADMIN,NET_RAW,NET_BIND_SERVICE --privileged \
-    --name rustscan \
-    docker.io/rustscan/rustscan:latest --no-config "$@"
-}
-
 export -f cewl
 export -f mitmproxy
-export -f rustscan

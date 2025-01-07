@@ -49,4 +49,7 @@
         - name: Install evtx (Windows Event Log parser)
           ansible.builtin.command:
             cmd: "cargo install evtx"
+        - name: Install rustscan
+          ansible.builtin.command:
+            cmd: "cargo install rustscan"
 
