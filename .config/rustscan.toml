@@ -1,1 +1,4 @@
-batch_size = 524188 
+batch_size = 65535
+timeout = 5000
+tries = 3
+scan_order = "Serial"
