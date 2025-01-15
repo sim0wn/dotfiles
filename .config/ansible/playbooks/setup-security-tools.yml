@@ -52,4 +52,8 @@
         - name: Install rustscan
           ansible.builtin.command:
             cmd: "cargo install rustscan"
-
+    - name: Install tools using pipx
+      block:
+        - name: Install impacket
+          ansible.builtin.command:
+            cmd: "pipx install impacket"
