@@ -21,13 +21,24 @@ function crackmapexec() {
       --network=host \
       crackmapexec "$@"
     else
+      SCRIPT="$(mktemp /tmp/crackmapexec.XXXXXX.sh)"
+      cat <<EOF > "${SCRIPT}"
+      #!/bin/bash
+      apt-get update -y
+      apt-get install git pipx -y
+      git clone https://github.com/byt3bl33d3r/CrackMapExec.git /opt/crackmapexec
+      cd /opt/crackmapexec
+      pipx ensurepath
+      source ~/.bashrc
+      pipx install .
+EOF
       podman kill crackmapexec 2> /dev/null && podman rm crackmapexec 2> /dev/null
       podman run --rm --detach --interactive --tty \
         --name=crackmapexec \
-        kalilinux/kali-rolling:latest
-      podman exec crackmapexec apt-get update -y
-      podman exec crackmapexec apt-get install crackmapexec -y
-      podman commit --change='ENTRYPOINT ["crackmapexec"]' crackmapexec crackmapexec
+        python:3.9-slim > /dev/null
+      podman cp "${SCRIPT}" crackmapexec:"${SCRIPT}"
+      podman exec crackmapexec /bin/bash "${SCRIPT}"
+      podman commit --change='ENTRYPOINT ["/root/.local/bin/crackmapexec"]' crackmapexec crackmapexec
       podman rm --force crackmapexec 2> /dev/null
       crackmapexec "$@"
   fi
