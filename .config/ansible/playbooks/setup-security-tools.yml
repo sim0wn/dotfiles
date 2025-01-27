@@ -55,6 +55,14 @@
         - name: Install rustscan
           ansible.builtin.command:
             cmd: "cargo install rustscan"
+    - name: Install tools using gem
+      block:
+        - name: Install evil-winrm
+          ansible.builtin.command:
+            cmd: "gem install evil-winrm"
+        - name: Install wpscan
+          ansible.builtin.command:
+            cmd: "gem install wpscan"
     - name: Install tools using pipx
       block:
         - name: Install certipy

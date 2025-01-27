@@ -35,6 +35,7 @@
           - podman-compose
           - python3-psutil
           - python3-sympy
+          - ruby-devel
           - ruff
           - ruff-lsp
           - ripgrep
