@@ -32,8 +32,7 @@ function crackmapexec() {
       source ~/.bashrc
       pipx install .
 EOF
-      podman kill crackmapexec 2> /dev/null && podman rm crackmapexec 2> /dev/null
-      podman run --rm --detach --interactive --tty \
+      podman run --rm --detach --interactive --tty --replace \
         --name=crackmapexec \
         python:3.9-slim > /dev/null
       podman cp "${SCRIPT}" crackmapexec:"${SCRIPT}"
@@ -58,6 +57,30 @@ function mitmproxy() {
     --volume="${PWD}:/data:Z" \
     --workdir="/data" \
     docker.io/mitmproxy/mitmproxy "$@"
+}
+
+function wrapwrap() {
+  if podman image exists wrapwrap; then
+    podman run --rm --interactive --tty \
+      --volume="${PWD}:/data:Z" \
+      --workdir="/data" \
+      wrapwrap "$@"
+  else
+    SCRIPT="$(mktemp /tmp/wrapwrap.XXXXXX.sh)"
+    cat > "${SCRIPT}" <<EOF
+    #!/bin/bash
+    apk update && apk add git
+    git clone https://github.com/ambionics/wrapwrap.git /opt/wrapwrap
+    pip install ten
+EOF
+    podman run --interactive --tty --rm --detach --replace \
+      --name=wrapwrap python:3.10-alpine
+    podman cp "${SCRIPT}" wrapwrap:"${SCRIPT}"
+    podman exec wrapwrap /bin/sh "${SCRIPT}"
+    podman commit --change='ENTRYPOINT ["python3", "/opt/wrapwrap/wrapwrap.py"]' wrapwrap wrapwrap
+    podman rm --force wrapwrap 2>/dev/null
+    wrapwrap "$@"
+  fi
 }
 
 export -f cewl
