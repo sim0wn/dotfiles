@@ -86,3 +86,4 @@ EOF
 export -f cewl
 export -f crackmapexec
 export -f mitmproxy
+export -f wrapwrap
