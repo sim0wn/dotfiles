@@ -71,6 +71,9 @@
         - name: Install enum4linux-ng
           ansible.builtin.command:
             cmd: "pipx install git+https://github.com/cddmp/enum4linux-ng.git"
+        - name: Install git-dumper
+          ansible.builtin.command:
+            cmd: "pipx install git-dumper"
         - name: Install impacket
           ansible.builtin.command:
             cmd: "pipx install impacket"
