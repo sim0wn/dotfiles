@@ -21,6 +21,7 @@
           - nmap
           - radare2
           - tcpdump
+          - wafw00f
           - whois
           - wireshark
         become: true
