@@ -78,3 +78,6 @@
         - name: Install impacket
           ansible.builtin.command:
             cmd: "pipx install impacket"
+        - name: Install regpol
+          ansible.builtin.command:
+            cmd: "pipx install git+https://github.com/jtpereyda/regpol.git"
