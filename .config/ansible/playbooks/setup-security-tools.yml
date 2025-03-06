@@ -66,6 +66,9 @@
             cmd: "gem install wpscan"
     - name: Install tools using pipx
       block:
+        - name: Install bloodhound ingestor
+          ansible.builtin.command:
+            cmd: "pipx install bloodhound-ce"
         - name: Install certipy
           ansible.builtin.command:
             cmd: "pipx install certipy"
