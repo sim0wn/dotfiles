@@ -14,35 +14,6 @@ export -f pandoc
 # --- Security Testing Tools ---
 # ------------------------------
 
-function crackmapexec() {
-  if podman image exists crackmapexec; then
-    podman run --rm --interactive --tty \
-      --volume="${HOME}/.local/share/cme:/root/.cme:Z" \
-      --network=host \
-      crackmapexec "$@"
-    else
-      SCRIPT="$(mktemp /tmp/crackmapexec.XXXXXX.sh)"
-      cat <<EOF > "${SCRIPT}"
-      #!/bin/bash
-      apt-get update -y
-      apt-get install git pipx -y
-      git clone https://github.com/byt3bl33d3r/CrackMapExec.git /opt/crackmapexec
-      cd /opt/crackmapexec
-      pipx ensurepath
-      source ~/.bashrc
-      pipx install .
-EOF
-      podman run --rm --detach --interactive --tty --replace \
-        --name=crackmapexec \
-        python:3.9-slim > /dev/null
-      podman cp "${SCRIPT}" crackmapexec:"${SCRIPT}"
-      podman exec crackmapexec /bin/bash "${SCRIPT}"
-      podman commit --change='ENTRYPOINT ["/root/.local/bin/crackmapexec"]' crackmapexec crackmapexec
-      podman rm --force crackmapexec 2> /dev/null
-      crackmapexec "$@"
-  fi
-}
-
 function cewl() {
   podman run --interactive --rm \
     --volume="${PWD}:/host" \
