@@ -1,15 +1,3 @@
-# ---------------------------------
-# --- Document Processing Tools ---
-# ---------------------------------
-
-function pandoc() {
-  podman run --rm \
-    --volume="${PWD}:/data:Z" \
-    pandoc/latex "$@"
-}
-
-export -f pandoc
-
 # ------------------------------
 # --- Security Testing Tools ---
 # ------------------------------

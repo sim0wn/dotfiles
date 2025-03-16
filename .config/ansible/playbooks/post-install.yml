@@ -30,6 +30,7 @@
           - neovim
           - nodejs
           - openvpn
+          - pandoc
           - pipx
           - podman
           - podman-compose
@@ -40,14 +41,7 @@
           - ruff-lsp
           - ripgrep
           - sqlite
-          - texlive-scheme-basic
-          - texlive-babel-portuges
-          - texlive-fontawesome5
-          - texlive-hyphen-portuguese
-          - texlive-parskip
-          - texlive-sourcesanspro
-          - texlive-tcolorbox
-          - texlive-tikzfill
+          - texlive-scheme-full
           - tmux
           - toolbox
           - vim
