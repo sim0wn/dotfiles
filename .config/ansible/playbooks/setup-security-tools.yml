@@ -14,11 +14,18 @@
           - aircrack-ng
           - binwalk
           - chisel
+          - dnsenum
           - hashcat
           - hivex
           - hydra
           - medusa
           - nmap
+          - perl-HTML-Parser
+          - perl-Net-DNS
+          - perl-Net-IP
+          - perl-Net-Netmask
+          - perl-WWW-Mechanize
+          - perl-XML-Writer
           - radare2
           - tcpdump
           - wafw00f
