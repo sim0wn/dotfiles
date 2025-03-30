@@ -88,6 +88,9 @@
         - name: Install regpol
           ansible.builtin.command:
             cmd: "pipx install git+https://github.com/jtpereyda/regpol.git"
+        - name: Install smtp-user-enum
+          ansible.builtin.command:
+            cmd: "pipx install smtp-user-enum"
     - name: Manually install tools
       block:
         - name: Install caido
