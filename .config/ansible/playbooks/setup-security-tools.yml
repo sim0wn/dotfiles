@@ -20,12 +20,22 @@
           - hydra
           - medusa
           - nmap
+          - onesixtyone
           - perl-HTML-Parser
           - perl-Net-DNS
           - perl-Net-IP
           - perl-Net-Netmask
           - perl-WWW-Mechanize
           - perl-XML-Writer
+          - python3-argcomplete
+          - python3-colorlog
+          - python3-cx-oracle
+          - python3-natlas-libnmap
+          - python3-passlib
+          - python3-pyasyncore
+          - python3-pycryptodomex
+          - python3-scapy
+          - python3-termcolor
           - radare2
           - tcpdump
           - wafw00f
@@ -106,3 +116,15 @@
             BODY="$(echo "${LATEST_RELEASE}" | jq -s '.[].body')"
             LINUX_X86_64="$(echo -e \"${BODY}\" | grep -oE '^.+\[Linux x86_64\]\(.*\)' | sed 's/.*(\(.*\))/\1/g')"
             curl -L "${LINUX_X86_64}" | tar zxf - -C "${HOME}/.local/bin/"
+        - name: Install Oracle Instant Client
+          become: true
+          ansible.builtin.shell: |
+            dnf install -y https://download.oracle.com/otn_software/linux/instantclient/oracle-instantclient-basic-linuxx64.rpm
+            dnf install -y https://download.oracle.com/otn_software/linux/instantclient/oracle-instantclient-devel-linuxx64.rpm
+            dnf install -y https://download.oracle.com/otn_software/linux/instantclient/oracle-instantclient-sqlplus-linuxx64.rpm
+        - name: Install odat
+          ansible.builtin.shell: |
+            git clone https://github.com/quentinhardy/odat.git "${HOME}/.local/opt/odat"
+            cd "${HOME}/.local/opt/odat"
+            git submodule init
+            git submodule update
