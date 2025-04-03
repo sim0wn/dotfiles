@@ -108,6 +108,9 @@
         - name: Install smtp-user-enum
           ansible.builtin.command:
             cmd: "pipx install smtp-user-enum"
+        - name: Install ssh-audit
+          ansible.builtin.command:
+            cmd: "pipx install ssh-audit"
     - name: Manually install tools
       block:
         - name: Install caido
