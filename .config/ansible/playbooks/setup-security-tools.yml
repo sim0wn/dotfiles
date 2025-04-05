@@ -35,6 +35,7 @@
           - python3-pyasyncore
           - python3-pycryptodomex
           - python3-scapy
+          - python3-scrapy
           - python3-termcolor
           - radare2
           - tcpdump
