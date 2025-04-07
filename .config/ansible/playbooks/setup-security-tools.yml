@@ -27,6 +27,7 @@
           - perl-Net-Netmask
           - perl-WWW-Mechanize
           - perl-XML-Writer
+          - python3.11
           - python3-argcomplete
           - python3-colorlog
           - python3-cx-oracle
@@ -112,6 +113,9 @@
         - name: Install ssh-audit
           ansible.builtin.command:
             cmd: "pipx install ssh-audit"
+        - name: Install theHarvester
+          ansible.builtin.command:
+            cmd: "pipx install --python python3.11 git+https://github.com/laramies/theHarvester.git"
     - name: Manually install tools
       block:
         - name: Install caido
