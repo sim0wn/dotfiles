@@ -1,8 +1,6 @@
 ---
 - name: Fedora post-installation playbook
   hosts: localhost
-  vars:
-    dconf_profile_path: "/org/gnome/terminal/legacy/profiles:"
   tasks:
     - name: Update repositories
       ansible.builtin.dnf:
@@ -38,9 +36,9 @@
           - python3-sympy
           - ruby-devel
           - ruff
-          - ruff-lsp
           - ripgrep
           - sqlite
+          - stow
           - texlive-scheme-full
           - tmux
           - toolbox
@@ -70,86 +68,13 @@
             immediate: yes
             permanent: yes
             zone: home
-    - name: Enable GS Connect extension
+    - name: Install GitHub Copilot CLI extension
       ansible.builtin.command:
-        cmd: "gnome-extensions enable gsconnect@andyholmes.github.io"
+        cmd: "gh extension install github/gh-copilot"
     - block:
-      - name: Golang tools
+      - name: Install Golang tools
         set_fact:
           GOPATH: "{{ ansible_env.HOME }}/.local/share/go"
       - name: Install fabric framework
         ansible.builtin.command:
           cmd: "go install github.com/danielmiessler/fabric@latest"
-    - name: Install GitHub Copilot CLI extension
-      ansible.builtin.command:
-        cmd: "gh extension install github/gh-copilot"
-    - name: Create a GNOME Terminal profile
-      block:
-        - name: Generate a new profile ID using uuidgen
-          command: uuidgen
-          register: uuidgen
-        - name:
-          community.general.dconf:
-            key: "{{ dconf_profile_path }}/list"
-            value: "['{{ uuidgen.stdout }}']"
-            state: present
-        - name: Set the profile name
-          community.general.dconf:
-            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/visible-name"
-            value: "'sim0wn'"
-            state: present
-        - name: Set the profile as default
-          community.general.dconf: 
-            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/default"
-            value: "true"
-            state: present
-        - name: Set the profile background color
-          community.general.dconf:
-            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/background-color"
-            value: "'#191724'"
-            state: present
-        - name: Set the profile foreground color
-          community.general.dconf:
-            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/foreground-color"
-            value: "'#E0DEF4'"
-            state: present
-        - name: Set the highlight background color
-          community.general.dconf:
-            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/highlight-background"
-            value: "['#2A273F']"
-            state: present
-        - name: Set the highlight foreground color
-          community.general.dconf:
-            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/highlight-foreground"
-            value: "'#575268'"
-            state: present
-        - name: Set the profile palette
-          community.general.dconf:
-            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/palette"
-            value: "['#191724', '#F38BA8', '#A6D6A8', '#F4B9A8', '#C4A7E7', '#F4B8E4', '#A5D6DB', '#E0DEF4', '#575268', '#F9E2AF', '#F4B9A8', '#A6D6A8', '#F38BA8', '#F4B8E4', '#C4A7E7', '#A5D6DB']"
-            state: present
-        - name: Don't use the system colors
-          community.general.dconf:
-            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/use-theme-colors"
-            value: "false"
-            state: present
-        - name: Set the profile font
-          community.general.dconf:
-            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/font"
-            value: "'JetBrains Mono 12'"
-            state: present
-        - name: Set the profile use-system-font
-          community.general.dconf:
-            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/use-system-font"
-            value: "false"
-            state: present
-        - name: Set the cursor shape
-          community.general.dconf:
-            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/cursor-shape"
-            value: "'underline'"
-            state: present
-        - name: Set scrollback unlimited
-          community.general.dconf:
-            key: "{{ dconf_profile_path }}/:{{ uuidgen.stdout }}/scrollback-unlimited"
-            value: "true"
-            state: present
