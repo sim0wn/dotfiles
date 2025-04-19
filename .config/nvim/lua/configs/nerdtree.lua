@@ -5,6 +5,7 @@ vim.cmd([[
 
 -- Keymaps
 vim.keymap.set('n', '<leader>fe', ':NERDTreeToggle<CR>')
+vim.keymap.set('n', '<leader>fo', ':NERDTreeFocus<CR>')
 
 -- Settings
 vim.g.NERDTreeDirArrows = 1
@@ -12,3 +13,4 @@ vim.g.NERDTreeIgnore = { '\\.pyc$', '\\~$', '\\.swp$', '\\.git$', 'node_modules'
 vim.g.NERDTreeShowHidden = 1
 vim.g.NERDTreeWinPos = "left"
 vim.g.NERDTreeWinSize = 40
+
