@@ -11,7 +11,9 @@
     - name: Install packages
       ansible.builtin.dnf:
         name:
+          - alien
           - android-tools
+          - cargo
           - firewalld
           - ftp
           - gh
@@ -29,7 +31,6 @@
           - nodejs
           - openvpn
           - pandoc
-          - pipx
           - podman
           - podman-compose
           - python3-psutil
@@ -42,6 +43,7 @@
           - texlive-scheme-full
           - tmux
           - toolbox
+          - uv
           - vim
           - wl-clipboard
           - xq
@@ -49,7 +51,7 @@
       become: true
     - name: Use stow to link dotfiles
       ansible.builtin.command:
-        cmd: "stow --adopt --target='{{ ansible_env.HOME }}' --dir='{{ ansible_env.HOME }}/.local/share/dotfiles' --stow ."
+        cmd: "stow --target='{{ ansible_env.HOME }}' --dir='{{ ansible_env.HOME }}/.local/share/dotfiles' --stow ."
     - name: Disable mouse acceleration
       ansible.builtin.dconf:
         key: /org/gnome/desktop/peripherals/mouse/accel-profile
@@ -71,10 +73,11 @@
     - name: Install GitHub Copilot CLI extension
       ansible.builtin.command:
         cmd: "gh extension install github/gh-copilot"
-    - block:
-      - name: Install Golang tools
-        set_fact:
-          GOPATH: "{{ ansible_env.HOME }}/.local/share/go"
-      - name: Install fabric framework
-        ansible.builtin.command:
-          cmd: "go install github.com/danielmiessler/fabric@latest"
+    - name: Install tools using Go
+      block:
+        - name: Define GOPATH
+          set_fact:
+            GOPATH: "{{ ansible_env.HOME }}/.local/share/go"
+        - name: Install fabric framework
+          ansible.builtin.command:
+            cmd: "go install github.com/danielmiessler/fabric@latest"

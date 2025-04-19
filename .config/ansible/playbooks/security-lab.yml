@@ -39,6 +39,8 @@
           - python3-scrapy
           - python3-termcolor
           - radare2
+          - samba-client
+          - samba-common-tools
           - tcpdump
           - wafw00f
           - whois
@@ -80,56 +82,68 @@
         - name: Install kerbrute
           ansible.builtin.command:
             cmd: "go install github.com/ropnop/kerbrute@latest"
-    - name: Install tools using pipx
+    - name: Install Python tools using uv
       block:
+        - name: Install python3.10
+          ansible.builtin.command:
+            cmd: "uv python install 3.10"
         - name: Install bloodhound ingestor
           ansible.builtin.command:
-            cmd: "pipx install bloodhound-ce"
+            cmd: "uv tool install git+https://github.com/dirkjanm/BloodHound.py@bloodhound-ce"
         - name: Install certipy
           ansible.builtin.command:
-            cmd: "pipx install certipy"
+            cmd: "uv tool install --with setuptools git+https://github.com/ly4k/Certipy.git"
         - name: Install enum4linux-ng
           ansible.builtin.command:
-            cmd: "pipx install git+https://github.com/cddmp/enum4linux-ng.git"
+            cmd: "uv tool install git+https://github.com/cddmp/enum4linux-ng.git"
         - name: Install git-dumper
           ansible.builtin.command:
-            cmd: "pipx install git-dumper"
+            cmd: "uv tool install --python 3.10 git+https://github.com/arthaud/git-dumper.git"
         - name: Install impacket
-          ansible.builtin.shell: |
-            pipx install impacket
-            pipx inject impacket pycryptodomex
+          ansible.builtin.command:
+            cmd: "uv tool install --python 3.10 git+https://github.com/fortra/impacket.git"
         - name: Install NetExec
           ansible.builtin.command:
-            cmd: "pipx install git+https://github.com/Pennyw0rth/NetExec.git"
+            cmd: "uv tool install --python 3.10 git+https://github.com/Pennyw0rth/NetExec.git"
         - name: Install pywhisker
           ansible.builtin.command:
-            cmd: "pipx install git+https://github.com/ShutdownRepo/pywhisker.git"
+            cmd: "uv tool install git+https://github.com/ShutdownRepo/pywhisker.git"
         - name: Install regpol
           ansible.builtin.command:
-            cmd: "pipx install git+https://github.com/jtpereyda/regpol.git"
+            cmd: "uv tool install git+https://github.com/jtpereyda/regpol.git"
         - name: Install smtp-user-enum
           ansible.builtin.command:
-            cmd: "pipx install smtp-user-enum"
+            cmd: "uv tool install git+https://github.com/cytopia/smtp-user-enum.git"
         - name: Install ssh-audit
           ansible.builtin.command:
-            cmd: "pipx install ssh-audit"
+            cmd: "uv tool install git+https://github.com/jtesta/ssh-audit.git"
         - name: Install theHarvester
           ansible.builtin.command:
-            cmd: "pipx install --python python3.11 git+https://github.com/laramies/theHarvester.git"
+            cmd: "uv tool install git+https://github.com/laramies/theHarvester.git"
     - name: Manually install tools
       block:
-        - name: Install caido
+        - name: Install Caido
           ansible.builtin.shell: | 
-            LATEST_RELEASE="$(curl -Ls 'http://api.github.com/repos/caido/caido/releases/latest')"
-            BODY="$(echo "${LATEST_RELEASE}" | jq -s '.[].body')"
-            LINUX_X86_64="$(echo -e \"${BODY}\" | grep -oE '^.+\[Linux x86_64\]\(.*\)' | sed 's/.*(\(.*\))/\1/g')"
-            curl -L "${LINUX_X86_64}" | tar zxf - -C "${HOME}/.local/bin/"
-        - name: Install Oracle Instant Client
+            TMP_DIR=$(mktemp -d)
+            curl -Ls 'http://api.github.com/repos/caido/caido/releases/latest' | 
+              jq -r '.body' | 
+              grep -oE '^.+\[Linux x86_64 \(deb\)\]\(.*\)' |
+              sed 's/.*(\(.*\))/\1/g' | 
+              xargs -I {} curl -Ls --output "${TMP_DIR}/caido.deb" {} && 
+              dpkg-deb -x "${TMP_DIR}/caido.deb" "${TMP_DIR}" && 
+              for DIR in "opt" "usr"; do 
+                cp -r "${TMP_DIR}/${DIR}/" "/${DIR}/" 
+              done && 
+              dpkg-deb -e "${TMP_DIR}/caido.deb" "${TMP_DIR}/DEBIAN" &&
+              "${TMP_DIR}/DEBIAN/postinst"
+              rm -rf "${TMP_DIR}"
           become: true
+        - name: Install Oracle Instant Client
           ansible.builtin.shell: |
             dnf install -y https://download.oracle.com/otn_software/linux/instantclient/oracle-instantclient-basic-linuxx64.rpm
             dnf install -y https://download.oracle.com/otn_software/linux/instantclient/oracle-instantclient-devel-linuxx64.rpm
             dnf install -y https://download.oracle.com/otn_software/linux/instantclient/oracle-instantclient-sqlplus-linuxx64.rpm
+          become: true
         - name: Install odat
           ansible.builtin.shell: |
             git clone https://github.com/quentinhardy/odat.git "${HOME}/.local/opt/odat"
