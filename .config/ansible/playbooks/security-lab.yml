@@ -43,6 +43,7 @@
           - samba-common-tools
           - tcpdump
           - wafw00f
+          - whatweb
           - whois
           - wireshark
       become: true
