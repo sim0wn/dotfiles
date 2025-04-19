@@ -82,3 +82,8 @@
         - name: Install fabric framework
           ansible.builtin.command:
             cmd: "go install github.com/danielmiessler/fabric@latest"
+    - name: Install tools manually
+      block:
+        - name: Install Bun
+          ansible.built.command:
+            cmd: "curl -fsSL https://bun.sh/install | bash"
