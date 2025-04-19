@@ -32,7 +32,7 @@
           - nodejs
           - openvpn
           - pandoc
-          - php
+          - php-cli
           - podman
           - podman-compose
           - python3-psutil
