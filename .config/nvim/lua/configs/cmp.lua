@@ -19,13 +19,14 @@ cmp.setup({
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     -- Use <C-k/j> to switch in items
-    -- ['<C-k>'] = cmp.mapping.select_prev_item(),
-    -- ['<C-j>'] = cmp.mapping.select_next_item(),
+    ['<C-k>'] = cmp.mapping.select_prev_item(),
+    ['<C-j>'] = cmp.mapping.select_next_item(),
     -- Ignore suggestions on <C-e>
     ['<C-e>'] = cmp.mapping.abort(),
     -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
     -- Use <C-Space> to confirm selection
-    ['<C-Space>'] = cmp.mapping.confirm({ select = true }),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 
     -- A super tab
     -- sourc: https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#luasnip
