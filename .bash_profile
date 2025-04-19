@@ -32,6 +32,12 @@ export GIT_CONFIG="${HOME}/.config/git/config"
 export GOPATH="${HOME}/.local/share/go"
 
 # ------------------------
+# --- Ruby preferences ---
+# ------------------------
+
+export GEM_HOME="${HOME}/.local"
+
+# ------------------------
 # --- Rust preferences ---
 # ------------------------
 
