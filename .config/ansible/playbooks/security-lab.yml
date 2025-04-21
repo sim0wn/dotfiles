@@ -13,14 +13,18 @@
         name:
           - aircrack-ng
           - binwalk
+          - bzip2-devel
           - chisel
           - dnsenum
+          - gmp-devel
           - hashcat
           - hivex
           - hydra
+          - libpcap-devel
           - medusa
           - nmap
           - onesixtyone
+          - openssl-devel
           - perl-HTML-Parser
           - perl-Net-DNS
           - perl-Net-IP
@@ -46,6 +50,7 @@
           - whatweb
           - whois
           - wireshark
+          - yasm
       become: true
     - name: Install tools using cargo
       block:
@@ -142,6 +147,9 @@
               "${TMP_DIR}/DEBIAN/postinst"
               rm -rf "${TMP_DIR}"
           become: true
+        - name: Install john
+          ansible.builtin.shell: |
+            git clone 'https://github.com/openwall/john.git' ~/.local/src/john
         - name: Install Oracle Instant Client
           ansible.builtin.shell: |
             dnf install -y https://download.oracle.com/otn_software/linux/instantclient/oracle-instantclient-basic-linuxx64.rpm
