@@ -33,6 +33,7 @@
           - perl-XML-Writer
           - python3.11
           - python3-argcomplete
+          - python3-beautifulsoup4
           - python3-colorlog
           - python3-cx-oracle
           - python3-natlas-libnmap
@@ -51,6 +52,10 @@
           - whois
           - wireshark
           - yasm
+          - zlib-ng
+          - zlib-ng-devel
+          - zlib-ng-compat
+          - zlib-ng-compat-devel
       become: true
     - name: Install tools using cargo
       block:
@@ -149,7 +154,11 @@
           become: true
         - name: Install john
           ansible.builtin.shell: |
-            git clone 'https://github.com/openwall/john.git' ~/.local/src/john
+            git clone 'https://github.com/openwall/john.git' -b bleeding-jumbo ~/.local/src/john
+            cd ~/.local/src/john/src
+            ./configure
+            make -s clean
+            make -sj16
         - name: Install Oracle Instant Client
           ansible.builtin.shell: |
             dnf install -y https://download.oracle.com/otn_software/linux/instantclient/oracle-instantclient-basic-linuxx64.rpm
